@@ -1,0 +1,103 @@
+{% extends "blogapp/base.html" %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f5f6fa;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        width: 80%;
+        max-width: 900px;
+        margin: 50px auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+    .top-bar a {
+        background: #27ae60;
+        color: #fff;
+        padding: 8px 14px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 14px;
+    }
+    .top-bar a:hover {
+        background: #1e874b;
+    }
+    .post-card {
+        background: #fdfdfd;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0px 2px 6px rgba(0,0,0,0.05);
+    }
+    .post-card h3 {
+        margin: 0;
+        color: #2980b9;
+    }
+    .post-meta {
+        font-size: 13px;
+        color: #777;
+        margin-bottom: 10px;
+    }
+    .post-actions {
+        margin-top: 10px;
+    }
+    .post-actions a {
+        margin-right: 10px;
+        font-size: 14px;
+        color: #2980b9;
+        text-decoration: none;
+    }
+    .post-actions a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container">
+    <h2>All Posts</h2>
+
+    <div class="top-bar">
+        {% if user.is_authenticated %}
+            <p>Welcome, <strong>{{ user.username }}</strong> | 
+                <a href="{% url 'logout' %}">Logout</a>
+            </p>
+            <a href="{% url 'post_create' %}">+ New Post</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+    </div>
+
+    {% for post in posts %}
+        <div class="post-card">
+            <h3>{{ post.title }}</h3>
+            <p class="post-meta">by {{ post.author.username }}</p>
+            <p>{{ post.content|truncatewords:25 }}</p>
+            {% if post.author == user %}
+                <div class="post-actions">
+                    <a href="{% url 'post_update' post.pk %}">✏ Edit</a>
+                    <a href="{% url 'post_delete' post.pk %}">🗑 Delete</a>
+                </div>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>No posts available yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}
