@@ -73,3 +73,8 @@ def post_delete(request, pk):
     post = get_object_or_404(Post, pk=pk, author=request.user)
     post.delete()
     return redirect("post_list")
+
+@login_required
+def my_posts(request):
+    posts = Post.objects.filter(author=request.user)
+    return render(request, "blogapp/my_posts.html", {"posts": posts})

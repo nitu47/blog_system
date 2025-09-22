@@ -1,0 +1,94 @@
+{% extends "blogapp/base.html" %}
+
+{% block content %}
+<style>
+    .container {
+        width: 80%;
+        max-width: 900px;
+        margin: 50px auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #333;
+    }
+    .post-card {
+        background: #fdfdfd;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0px 2px 6px rgba(0,0,0,0.05);
+    }
+    .post-card h3 {
+        margin: 0 0 10px 0;
+        color: #2980b9;
+    }
+    .post-meta {
+        font-size: 13px;
+        color: #777;
+        margin-bottom: 10px;
+    }
+    .post-actions {
+        margin-top: 15px;
+    }
+    .post-actions a {
+        margin-right: 15px;
+        font-size: 14px;
+        color: #2980b9;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .post-actions a:hover {
+        text-decoration: underline;
+    }
+    .empty-message {
+        text-align: center;
+        font-size: 16px;
+        color: #555;
+        margin-top: 20px;
+    }
+    .create-btn {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 18px;
+        background: #27ae60;
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 15px;
+    }
+    .create-btn:hover {
+        background: #1e874b;
+    }
+</style>
+
+<div class="container">
+    <h2> My Posts</h2>
+
+    {% if posts %}
+        {% for post in posts %}
+            <div class="post-card">
+                <h3>{{ post.title }}</h3>
+                <p class="post-meta">🗓 Created on {{ post.created_at|date:"M d, Y" }}</p>
+                <p>{{ post.content|truncatewords:25 }}</p>
+
+                <div class="post-actions">
+                    <a href="{% url 'post_update' post.pk %}">✏ Edit</a>
+                    <a href="{% url 'post_delete' post.pk %}">🗑 Delete</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-message">
+            <p>You haven’t added any posts yet.</p>
+            <a href="{% url 'post_create' %}" class="create-btn">+ Create Your First Post</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
